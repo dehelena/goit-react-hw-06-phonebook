@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { StyledFormAddContacts } from './FormAddContact.styled';
+import { addContact } from 'redux/ContactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { getContacts } from 'redux/selectors';
 
-const FormAddContact = ({ onAddContact }) => {
-  const [contact, setContact] = useState({ name: '', number: '' });
-
-  const handleChange = ({ target: { name, value } }) => {
-    // const { name, value } = e.target;
-    // const { name, value } = event.target;
-    setContact({ ...contact, [name]: value });
-  };
+export const FormAddContact = () => {
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleSubmit = e => {
+    const form = e.target;
     e.preventDefault();
 
-    onAddContact(contact);
+    const contact = {
+      id: nanoid(),
+      name: form.elements.name.value,
+      number: form.elements.number.value,
+    };
 
-    reset();
-  };
+    const isExist = contacts.some(el => el.name === contact.name);
 
-  const reset = () => {
-    setContact({ name: '', number: '' });
+    if (isExist) {
+      alert(`${contact.name} is already in contact list.`);
+      return;
+    }
+    dispatch(addContact(contact));
+
+    form.reset();
   };
 
   return (
@@ -33,8 +40,6 @@ const FormAddContact = ({ onAddContact }) => {
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
-          value={contact.name}
-          onChange={handleChange}
         />
       </label>
       <label className="label">
@@ -44,19 +49,10 @@ const FormAddContact = ({ onAddContact }) => {
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          // value={this.state.number}
           required
-          value={contact.number}
-          onChange={handleChange}
         />
       </label>
       <button type="submit">Add contact</button>
     </StyledFormAddContacts>
   );
 };
-
-FormAddContact.propTypes = {
-  onAddContact: PropTypes.func.isRequired,
-};
-
-export default FormAddContact;

@@ -1,23 +1,23 @@
-import PropTypes from 'prop-types';
-import { FilterStyled } from "./FilterStyled";
+// import PropTypes from 'prop-types';
+import { FilterStyled } from './FilterStyled';
+import { filterContacts } from 'redux/FilterSlice';
+import { useDispatch } from 'react-redux';
 
-export const Filter = ({ value, getFilteredFriend }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
+
   return (
-      <FilterStyled>
-    <label>
+    <FilterStyled>
+      <label>
         Find contacts by name
         <input
           type="text"
           name="filter"
-          value={value}
-          onChange={getFilteredFriend}
+          onChange={e => {
+            dispatch(filterContacts(e.target.value));
+          }}
         />
       </label>
     </FilterStyled>
   );
 };
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  getFilteredFriend: PropTypes.func.isRequired,
-}
