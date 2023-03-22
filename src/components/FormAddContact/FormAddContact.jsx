@@ -1,9 +1,8 @@
 import React from 'react';
 import { StyledFormAddContacts } from './FormAddContact.styled';
-import { addContact } from 'redux/ContactsSlice';
+import { addContact, getContacts } from 'redux/ContactsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
-import { getContacts } from 'redux/selectors';
 
 export const FormAddContact = () => {
   const contacts = useSelector(getContacts);
@@ -14,7 +13,7 @@ export const FormAddContact = () => {
     e.preventDefault();
 
     const contact = {
-      id: nanoid(),
+      id: nanoid(6),
       name: form.elements.name.value,
       number: form.elements.number.value,
     };
