@@ -5,8 +5,6 @@ import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactsList/ContactsList';
 
 const App = () => {
-  // const contacts = useSelector(getContacts);
-
   return (
     <div>
       <StyledTitle>Phonebook</StyledTitle>
